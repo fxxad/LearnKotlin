@@ -10,11 +10,8 @@ class BaseApplication : Application() {
 
     //伴生对象
     companion object{
-        private lateinit var curApplication: Application
-
-        fun curApplication():Context{
-            return curApplication
-        }
+        lateinit var curApplication: Application
+            private set
     }
 
     override fun attachBaseContext(base: Context?) {

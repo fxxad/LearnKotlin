@@ -1,8 +1,11 @@
 package com.xx.learnkotlin
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -11,6 +14,14 @@ import com.xx.base.util.toast
 import com.xx.learnkotlin.entity.User
 import com.xx.learnkotlin.widget.CodeView
 import com.xx.lesson.LessonActivity
+
+fun Activity.log(text:String){
+    Log.e("Activity",text)
+}
+
+fun Context.log(text:String){
+    Log.e("Context",text)
+}
 
 class MainActivity : AppCompatActivity(),View.OnClickListener{
 
@@ -25,6 +36,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        log("activity")
+        (this as Context).log("context")
+
         etUserName = findViewById(R.id.et_username)
         etPassword = findViewById(R.id.et_password)
         etCode = findViewById(R.id.et_code)
@@ -62,15 +77,24 @@ class MainActivity : AppCompatActivity(),View.OnClickListener{
     }
 
     private fun verify(user: User):Boolean{
-        if(user.userName == null || user.userName!!.length < 4){
+        if(user.username?.length ?: 0 <4){
             toast("用户名不合法")
             return false
         }
-
-        if(user.password == null || user.password!!.length < 4){
+        if(user.password?.length ?: 0 <4){
             toast("密码不合法")
             return false
         }
         return true
+
+//        if(user.username == null || user.username!!.length < 4){
+//            toast("用户名不合法")
+//            return false
+//        }
+//        if(user.password == null || user.password!!.length < 4){
+//            toast("密码不合法")
+//            return false
+//        }
+//        return true
     }
 }

@@ -1,14 +1,17 @@
 package com.xx.base.http
 
+import android.util.Log
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
 import java.lang.reflect.Type
 
 object HttpClient : OkHttpClient() {
+    const val TAG = "http";
     private val gson = Gson()
 
     fun <T> convert(json: String?, type: Type): T {
+        Log.d(TAG,json!!)
         return gson.fromJson(json, type)
     }
 

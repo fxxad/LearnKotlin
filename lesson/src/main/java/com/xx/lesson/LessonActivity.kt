@@ -15,50 +15,54 @@ import com.xx.base.BaseView
 import com.xx.lesson.entity.Lesson
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class LessonActivity :AppCompatActivity(),BaseView<LessonPresenter?>,Toolbar.OnMenuItemClickListener{
+class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter>,
+    Toolbar.OnMenuItemClickListener {
 
-    private val lessonPresenter = LessonPresenter(this)
     private val lessonAdapter = LessonAdapter()
-    private lateinit var refreshLayout:SwipeRefreshLayout
+    private lateinit var refreshLayout: SwipeRefreshLayout
+
+    override val presenter: LessonPresenter by lazy {
+        LessonPresenter(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson)
         initLayout()
-        getPresenter()?.fetchData()
+        presenter.fetchData()
     }
 
     /**
      * 初始化布局
      */
-    private fun initLayout(){
+    private fun initLayout() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.inflateMenu(R.menu.menu_lesson)
         toolbar.setOnMenuItemClickListener(this)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.list)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = lessonAdapter
-        recyclerView.addItemDecoration(DividerItemDecoration(this,LinearLayout.VERTICAL))
-        refreshLayout = findViewById(R.id.refresh)
-        refreshLayout.setOnRefreshListener {getPresenter()?.fetchData()}
-        refreshLayout.isRefreshing = true
-    }
+        findViewById<RecyclerView>(R.id.list).apply {
+            layoutManager = LinearLayoutManager(this@LessonActivity)
+            adapter = lessonAdapter
+            addItemDecoration(DividerItemDecoration(this@LessonActivity, LinearLayout.VERTICAL))
+        }
 
-    override fun getPresenter(): LessonPresenter? {
-        return lessonPresenter
+        findViewById<SwipeRefreshLayout>(R.id.refresh).apply {
+            setOnRefreshListener { presenter.fetchData() }
+            isRefreshing = true
+        }
     }
 
     /**
      * 展示数据,停止刷新动画
      */
-    public fun showResult(lessons :List<Lesson>?){
+    internal fun showResult(lessons: List<Lesson>?) {
         lessonAdapter.updateAndNotify(lessons!!)
         refreshLayout.isRefreshing = false
     }
 
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
-        getPresenter()?.showPlayback()
+        presenter.showPlayback()
         return false
     }
+
 }

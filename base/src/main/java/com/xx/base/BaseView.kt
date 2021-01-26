@@ -1,5 +1,5 @@
 package com.xx.base
 
-interface BaseView<T> {
-    fun getPresenter():T
+interface  BaseView<T> {
+    val presenter:T
 }

@@ -11,29 +11,24 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.xx.base.util.dp2px
 import java.util.*
 
-class CodeView: AppCompatTextView {
+class CodeView @JvmOverloads constructor(context: Context,attr: AttributeSet? = null): AppCompatTextView (context,attr){
 
-    constructor(context:Context):this(context,null){
+    private val codeList = arrayOf("kotlin","android","java","https","okhttp","tcp/ip")
+
+    private val mPaint = Paint().apply {
+        this.isAntiAlias = true
+        this.style = Paint.Style.STROKE
+        this.color = Color.RED
+        this.strokeWidth = 6f.dp2px()
     }
 
-    constructor(context: Context,attr:AttributeSet?):super(context,attr){
+    init {
         setTextSize(TypedValue.COMPLEX_UNIT_SP,18f)
         gravity = Gravity.CENTER
         setBackgroundColor(Color.GREEN)
         setTextColor(Color.WHITE)
-
-        mPaint.isAntiAlias = true
-        mPaint.style = Paint.Style.STROKE
-        mPaint.color = Color.RED
-        mPaint.strokeWidth = dp2px(12f)
-
         updateCode()
     }
-
-    private val codeList = arrayOf("kotlin","android","java","https","okhttp","tcp/ip")
-
-    private val mPaint = Paint()
-
 
     fun updateCode(){
         val random = Random().nextInt(codeList.size)
